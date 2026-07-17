@@ -1,0 +1,21 @@
+name: emailtest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  emailtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send test email to first recipient only
+        env:
+          ALERT_EMAILS: ${{ secrets.ALERT_EMAILS }}
+        run: |
+          python3 - <<'EOF'
+          import os, watcher
+          watcher.ALERT_EMAILS = [os.environ["ALERT_EMAILS"].split(",")[0].strip()]
+          watcher.send_email("Pelosa Test 2 (GitHub)",
+                             "Test 2: GitHub sunucusundan mail testi. Bu mail geldiyse bulut->mail hatti calisiyor.")
+          EOF

@@ -25,7 +25,7 @@ URL = "https://app.stintinospiagge.it/prenotazioni/1/1?lang=en"
 NORMAL_INTERVAL = 30           # seconds
 FAST_INTERVAL = 5              # seconds, during the morning release window
 FAST_WINDOW_UTC = ((5, 55), (6, 15))   # 08:55-09:15 TR
-REALERT_COOLDOWN = 30 * 60     # per-date re-alert while slots stay open
+REALERT_COOLDOWN = 3 * 60 * 60  # per-date re-alert while slots stay open
 
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
 ALERT_EMAILS = [e.strip() for e in os.environ.get("ALERT_EMAILS", "").split(",") if e.strip()]
