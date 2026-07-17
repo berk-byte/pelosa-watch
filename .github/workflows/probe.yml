@@ -1,0 +1,14 @@
+name: probe
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: One-shot availability check
+        run: |
+          python3 -c "from watcher import fetch_counts; print('COUNTS:', fetch_counts())"
