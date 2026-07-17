@@ -1,0 +1,29 @@
+name: watch
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+    inputs:
+      test_alert:
+        description: "Send a test notification at startup"
+        type: boolean
+        default: false
+
+concurrency:
+  group: watch
+  cancel-in-progress: true
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 220
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run watcher
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          ALERT_EMAILS: ${{ secrets.ALERT_EMAILS }}
+          LOOP_MINUTES: "200"
+          TEST_ALERT: ${{ inputs.test_alert }}
+        run: python3 watcher.py
