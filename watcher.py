@@ -24,7 +24,7 @@ from datetime import datetime, timezone, timedelta
 URL = "https://app.stintinospiagge.it/prenotazioni/1/1?lang=en"
 NORMAL_INTERVAL = 30           # seconds
 FAST_INTERVAL = 5              # seconds, during the morning release window
-FAST_WINDOW_UTC = ((5, 55), (6, 15))   # 08:55-09:15 TR
+FAST_WINDOW_UTC = ((5, 50), (7, 20))   # 08:50-10:20 TR: covers both 09:00 TR and 09:00 Italy (10:00 TR) openings
 REALERT_COOLDOWN = 3 * 60 * 60  # per-date re-alert while slots stay open
 
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
