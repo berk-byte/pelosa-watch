@@ -2,7 +2,7 @@ name: watch
 
 on:
   schedule:
-    - cron: "7 * * * *"
+    - cron: "7,27,47 * * * *"
   workflow_dispatch:
     inputs:
       test_alert:
@@ -10,9 +10,12 @@ on:
         type: boolean
         default: false
 
+# One run polls for up to LOOP_MINUTES; newer triggers queue up (not cancel)
+# and take over the moment the running one finishes, so skipped cron fires
+# don't create coverage gaps.
 concurrency:
   group: watch
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   watch:
