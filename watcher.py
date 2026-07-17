@@ -92,6 +92,25 @@ def send_email(subject, message):
         log(f"email -> {email[:4]}***: {'OK' if ok else 'FAILED ' + r.stdout[:150]}")
 
 
+def create_issue(title, body):
+    """GitHub issue as a notification channel: GitHub emails repo watchers."""
+    token = os.environ.get("GH_TOKEN", "")
+    repo = os.environ.get("GITHUB_REPOSITORY", "")
+    if not token or not repo:
+        return
+    payload = json.dumps({"title": title, "body": body})
+    r = subprocess.run(
+        ["curl", "-s", "--max-time", "20", "-X", "POST",
+         f"https://api.github.com/repos/{repo}/issues",
+         "-H", f"Authorization: Bearer {token}",
+         "-H", "Accept: application/vnd.github+json",
+         "-d", payload],
+        capture_output=True, text=True,
+    )
+    ok = '"number"' in r.stdout
+    log(f"github issue: {'OK' if ok else 'FAILED ' + r.stdout[:150]}")
+
+
 def alert(open_dates, counts):
     detail = "  ".join(f"{d}: {n} yer" for d, n in sorted(counts.items()))
     dates_str = ", ".join(sorted(open_dates))
@@ -99,6 +118,7 @@ def alert(open_dates, counts):
            f"HEMEN GIR (60 saniye form suresi var): {URL}")
     send_ntfy("YER ACILDI — La Pelosa", msg)
     send_email("🏖 YER AÇILDI — La Pelosa — HEMEN BAK", msg)
+    create_issue(f"🏖 YER AÇILDI: {dates_str}", msg)
 
 
 def current_interval():

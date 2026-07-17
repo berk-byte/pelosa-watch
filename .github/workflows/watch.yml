@@ -21,6 +21,9 @@ jobs:
   watch:
     runs-on: ubuntu-latest
     timeout-minutes: 220
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
       - name: Run watcher
@@ -29,4 +32,5 @@ jobs:
           ALERT_EMAILS: ${{ secrets.ALERT_EMAILS }}
           LOOP_MINUTES: "200"
           TEST_ALERT: ${{ inputs.test_alert }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 watcher.py
